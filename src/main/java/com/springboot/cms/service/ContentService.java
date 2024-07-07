@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public interface ContentService {
-    List<ContentDto> getAllContent();
+    PageDto<ContentDto> getAllContent(ContentSearchRequestDto contentSearchRequestDto);
     ContentDto getContentById(Integer id);
     ContentDto createContent(ContentDto contentDto);
     ContentDto updateContent(ContentDto contentDto);

@@ -21,6 +21,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,8 +45,25 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    public List<ContentDto> getAllContent() {
-        return contentRepository.findAll().stream().map(contentMapper::mappedToDto).toList();
+    public PageDto<ContentDto> getAllContent(ContentSearchRequestDto contentSearchRequestDto) {
+        if (contentSearchRequestDto.getKeySearch() == null){
+            contentSearchRequestDto.setKeySearch(" ");
+        }
+        List<ContentDto> contentDtoList = customRepository.search(
+                        contentSearchRequestDto.getKeySearch(),
+                        contentSearchRequestDto.getPage(), contentSearchRequestDto.getSize()
+                ).stream()
+                .map(contentMapper::toDto)
+                .toList();
+        long totalElements = customRepository.count(contentSearchRequestDto.getKeySearch());
+        long totalPages = (long) Math.ceil((double) totalElements / contentSearchRequestDto.getSize());
+        return PageDto.<ContentDto>builder()
+                .items(contentDtoList)
+                .page(contentSearchRequestDto.getPage())
+                .size(contentSearchRequestDto.getSize())
+                .totalElements(totalElements)
+                .totalPages(totalPages)
+                .build();
     }
 
     @Override

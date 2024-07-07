@@ -46,12 +46,7 @@
             if (memberDto == null){
                 throw new IllegalArgumentException("Member cannot be null");
             }
-            if (principal.getUser().getRoles().stream()
-                    .noneMatch(role -> role.getRoleName().equals("ADMIN"))) {
-                if (!principal.getUser().getId().equals(memberDto.getUserId())) {
-                    throw new AccessDeniedException("You do not have permission to update detailed information for this member");
-                }
-            }
+            memberDto.setUserId(principal.getUser().getId());
                 MemberEntity memberEntity = memberRepository.save(memberMapper.mappedToEntity(memberDto));
             memberDto.setId(memberEntity.getId());
             return memberDto;

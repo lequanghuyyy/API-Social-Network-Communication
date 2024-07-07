@@ -25,8 +25,8 @@ public class ContentController {
         this.contentService = contentService;
     }
     @GetMapping
-    public ResponseEntity<BaseResponse<List<ContentDto>>> getContent(){
-        return ResponseFactory.ok(contentService.getAllContent());
+    public ResponseEntity<BaseResponse<PageDto<ContentDto>>> getContent(@Valid @RequestBody ContentSearchRequestDto contentSearchRequestDto){
+        return ResponseFactory.ok(contentService.getAllContent(contentSearchRequestDto));
     }
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<ContentDto>> getContentById(@PathVariable Integer id) {

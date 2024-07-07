@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 public class ContentSearchRequestDto {
-    @NotBlank
+
     private String keySearch;
 
     @Min(value = 1, message = "Page must be at least 1")
